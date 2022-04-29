@@ -1,4 +1,7 @@
 # ArtemisTutorMapper
+
+*Note: This tool has not been fully tested and therefore might cause issues. This IS work in progress. However, in theory, there <u>shouldn't</u> be any problems using it.*
+
 The platform Artemis does not offer a possibility for tutors to correct their **own** students.
 This project provides a workaround for this by allowing tutors to start the correction of submissions of their own students at once
 and therefore allows them to open the correction-page right from their dashboard.
