@@ -1,0 +1,54 @@
+name: Maven Package
+
+on:
+  push:
+    # Automatically release on tag
+    tags:
+      - v*
+  # Allow manual build-trigger (won't create release)
+  workflow_dispatch:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: 17
+
+      - name: Cache Maven packages
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
+          restore-keys: ${{ runner.os }}-maven-
+
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
+
+      - name: Move output-JAR
+        run: |
+          mkdir dist
+          mv target/ArtemisTutor*.jar dist/ArtemisTutorMapping.jar
+
+      - name: Save JAR
+        uses: actions/upload-artifact@v3
+        with:
+          name: "ArtemisTutorMapping Distribution"
+          path: "dist/ArtemisTutorMapping.jar"
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/v')
+        with:
+          files: |
+            dist/ArtemisTutorMapping.jar
