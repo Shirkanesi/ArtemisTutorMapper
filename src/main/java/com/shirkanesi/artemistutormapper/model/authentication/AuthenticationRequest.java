@@ -19,6 +19,7 @@ public class AuthenticationRequest {
     private String password;
 
     @JsonProperty
+    @Builder.Default
     private boolean rememberMe = false;
 
 }

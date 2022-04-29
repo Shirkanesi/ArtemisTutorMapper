@@ -4,7 +4,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.Option;
 
 import java.io.Console;
-import java.util.ConcurrentModificationException;
 import java.util.Scanner;
 
 public class TUIHelper {

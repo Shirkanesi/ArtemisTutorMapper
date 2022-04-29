@@ -5,7 +5,6 @@ import com.shirkanesi.artemistutormapper.logic.ArtemisClient;
 import com.shirkanesi.artemistutormapper.logic.AuthenticationService;
 import com.shirkanesi.artemistutormapper.logic.StudentFileParser;
 import com.shirkanesi.artemistutormapper.logic.ui.TUIHelper;
-import com.shirkanesi.artemistutormapper.model.Course;
 import com.shirkanesi.artemistutormapper.model.Submission;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
@@ -16,20 +15,15 @@ import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 
 import java.io.BufferedReader;
-import java.io.Console;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 @Slf4j
 public class ArtemisTutorMapper {
 
     public static String ARTEMIS_BASE_URL = "https://artemis.praktomat.cs.kit.edu";
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
-    public static Scanner scanner = new Scanner(System.in);
     private List<String> studentNames;
 
     private final ArtemisClient artemisClient;

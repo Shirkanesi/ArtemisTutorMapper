@@ -4,7 +4,6 @@ import com.shirkanesi.artemistutormapper.model.Course;
 import com.shirkanesi.artemistutormapper.model.Submission;
 import com.shirkanesi.artemistutormapper.model.error.JHipsterError;
 import com.squareup.okhttp.Call;
-import com.squareup.okhttp.MediaType;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.RequestBody;
