@@ -1,0 +1,18 @@
+<configuration>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <withJansi>false</withJansi>
+        <encoder>
+<!--            <pattern>%green(%d{HH:mm:ss}) %highlight(%-8([%thread]) %-5level) %magenta(%logger) - %msg%n</pattern>-->
+            <pattern>%highlight(%-5level)- %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <statusListener class="ch.qos.logback.core.status.NopStatusListener" />
+    <logger name="ch.qos.logback" level="OFF" />
+
+    <root level="info">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
