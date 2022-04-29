@@ -1,6 +1,6 @@
 # ArtemisTutorMapper
 
-*Note: This tool has not been fully tested and therefore might cause issues. This IS work in progress. However, in theory, there <u>shouldn't</u> be any problems using it.*
+*Note: This tool has not been fully tested and therefore might cause issues. This IS work in progress. However, in theory, there <u>shouldn't</u> be any problems using it. Technically Artemis has a limit for how many assessments a tutor can have open at once, however, I had no posibillity the test whether this causes an issue.*
 
 The platform Artemis does not offer a possibility for tutors to correct their **own** students.
 This project provides a workaround for this by allowing tutors to start the correction of submissions of their own students at once
