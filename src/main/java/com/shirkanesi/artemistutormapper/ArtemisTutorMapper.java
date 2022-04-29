@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shirkanesi.artemistutormapper.logic.ArtemisClient;
 import com.shirkanesi.artemistutormapper.logic.AuthenticationService;
 import com.shirkanesi.artemistutormapper.logic.StudentFileParser;
+import com.shirkanesi.artemistutormapper.logic.ui.TUIHelper;
+import com.shirkanesi.artemistutormapper.model.Course;
 import com.shirkanesi.artemistutormapper.model.Submission;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
@@ -17,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.Console;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -25,6 +28,8 @@ public class ArtemisTutorMapper {
 
     public static String ARTEMIS_BASE_URL = "https://artemis.praktomat.cs.kit.edu";
     public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+
+    public static Scanner scanner = new Scanner(System.in);
     private List<String> studentNames;
 
     private final ArtemisClient artemisClient;
@@ -56,39 +61,37 @@ public class ArtemisTutorMapper {
             return;
         }
 
-        String username = cmd.getOptionValue(usernameOption);
-        String password;
-        if (cmd.hasOption(passwordOption)) {
-            password = cmd.getOptionValue(passwordOption);
-        } else {
-            Console console = System.console();
-            if (console != null) {
-                // Get password from console (not visible)
-                password = String.valueOf(System.console().readPassword("Password: "));
-            } else {
-                // Last fallback-option: get password directly from System.in using a scanner (input visible!)
-                Scanner scanner = new Scanner(System.in);
-                System.out.print("Password (cleartext): ");
-                password = scanner.nextLine();
-            }
-        }
+        String username = TUIHelper.getStringParameter(cmd, usernameOption);
+        String password = TUIHelper.getPasswordParameter(cmd, passwordOption);
 
         if (cmd.hasOption(artemisOption)) {
             String optionValue = cmd.getOptionValue(artemisOption);
             while (optionValue.endsWith("/")) {
+                // remove slash at the end
                 optionValue = optionValue.substring(0, optionValue.length() - 1);
             }
             ARTEMIS_BASE_URL = optionValue;
         }
 
-        String file = cmd.getOptionValue(fileOption);
-        int exerciseId = Integer.parseInt(cmd.getOptionValue(exerciseOption));
+        String file = TUIHelper.getStringParameter(cmd, fileOption);
 
 
-        // Parameters parsed and available
+        // Auth-Parameters parsed and available
 
         AuthenticationService authenticationService = new AuthenticationService(username, password);
         ArtemisClient client = new ArtemisClient(authenticationService);
+
+        if (!cmd.hasOption(exerciseOption)) {
+            log.info("List of all exercises:");
+            client.getCoursesForManagement()
+                    .stream()
+                    .flatMap(course -> course.getExercises().stream())
+                    .map(exercise -> String.format("%d: %s", exercise.getId(), exercise.getTitle()))
+                    .forEachOrdered(System.out::println);
+        }
+
+        int exerciseId = TUIHelper.getIntegerParameter(cmd, exerciseOption);
+
 
         ArtemisTutorMapper artemisTutorMapper = new ArtemisTutorMapper(client);
 
@@ -102,22 +105,29 @@ public class ArtemisTutorMapper {
     }
 
     private void loadOwnStudents(final String filePath) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath));
-        StringBuilder content = new StringBuilder();
+        try (BufferedReader bufferedReader = new BufferedReader(new FileReader(filePath))) {
+            StringBuilder content = new StringBuilder();
 
-        String read;
-        while ((read = bufferedReader.readLine()) != null) {
-            content.append(read).append("\n");
+            String read;
+            while ((read = bufferedReader.readLine()) != null) {
+                content.append(read).append("\n");
+            }
+
+            this.studentNames = StudentFileParser.parseStudentsFile(content.toString());
+            log.info("Loaded {} students from {}", this.studentNames.size(), filePath);
         }
-
-        this.studentNames = StudentFileParser.parseStudentsFile(content.toString());
     }
+
     private void lockAllSubmissionsOfOwnStudents(int exerciseId) {
         List<Submission> submissions = this.artemisClient.getSubmissionsForExercise(exerciseId);
 
         log.info("Trying to lock submissions of own students (for exercise {}).", exerciseId);
 
+        log.info("Found {} submissions in total", submissions.size());
+
         submissions.stream()
+//                .map(submission -> submission.getParticipation().getStudent().getName()).forEach(System.out::println);    // TODO: debug only
+//                .forEach(System.out::println);
                 .filter(this::isOwnStudent) // we only want to lock submissions of own students
                 .forEach(artemisClient::lockSubmission);    // lock the submissions
     }

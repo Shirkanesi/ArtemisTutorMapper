@@ -11,7 +11,6 @@ import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import lombok.extern.slf4j.Slf4j;
 
-import javax.security.auth.login.LoginException;
 import java.io.IOException;
 
 @Slf4j
