@@ -1,12 +1,9 @@
 package com.shirkanesi.artemistutormapper.logic;
 
 import com.shirkanesi.artemistutormapper.model.Course;
-import com.shirkanesi.artemistutormapper.model.submission.Submission;
-import com.shirkanesi.artemistutormapper.model.error.JHipsterError;
 import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import lombok.extern.slf4j.Slf4j;
 

@@ -7,6 +7,7 @@ import com.shirkanesi.artemistutormapper.logic.AuthenticationService;
 import com.shirkanesi.artemistutormapper.logic.StudentFileParser;
 import com.shirkanesi.artemistutormapper.logic.ui.TUIHelper;
 import com.shirkanesi.artemistutormapper.model.exercise.Exercise;
+import com.shirkanesi.artemistutormapper.model.exercise.ExerciseTypes;
 import com.shirkanesi.artemistutormapper.model.submission.Submission;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
@@ -84,7 +85,9 @@ public class ArtemisTutorMapper {
 
         Set<Exercise> exercises = client.getCoursesForManagement()
                 .stream()
-                .flatMap(course -> course.getExercises().stream()).collect(Collectors.toSet());
+                .flatMap(course -> course.getExercises().stream())
+                .filter(exercise -> !exercise.getType().equals(ExerciseTypes.UNKNOWN))
+                .collect(Collectors.toSet());
 
         if (!cmd.hasOption(exerciseOption)) {
             log.info("List of all exercises:");

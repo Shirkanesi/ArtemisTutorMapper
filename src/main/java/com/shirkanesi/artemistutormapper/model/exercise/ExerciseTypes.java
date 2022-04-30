@@ -5,7 +5,6 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.ToString;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 @ToString
 public enum ExerciseTypes {
@@ -13,8 +12,12 @@ public enum ExerciseTypes {
     PROGRAMMING("programming", ProgrammingExercise.class),
     FILE_UPLOAD("file-upload", FileUploadExercise.class),
 
+    TEXT("text", TextExercise.class),
+
+    MODELING("modeling", ModelingExercise.class),
+
     @JsonEnumDefaultValue
-    UNKNOWN("unknown", null);
+    UNKNOWN("unknown", UnknownExercise.class);
 
     private final String internalName;
     private final Class<? extends Exercise> objectClass;
@@ -24,11 +27,11 @@ public enum ExerciseTypes {
         this.objectClass = objectClass;
     }
 
-    public static Optional<ExerciseTypes> getByInternalName(String name) {
+    public static ExerciseTypes getByInternalName(String name) {
         return Arrays.stream(ExerciseTypes.values())
                 .filter(exerciseTypes -> exerciseTypes.getInternalName().equalsIgnoreCase(name))
-                .filter(exerciseTypes -> !exerciseTypes.equals(UNKNOWN))
-                .findFirst();
+//                .filter(exerciseTypes -> !exerciseTypes.equals(UNKNOWN))
+                .findFirst().orElse(ExerciseTypes.UNKNOWN);
     }
 
     @JsonValue

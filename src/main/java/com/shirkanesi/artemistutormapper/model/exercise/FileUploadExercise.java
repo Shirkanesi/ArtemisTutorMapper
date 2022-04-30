@@ -1,10 +1,8 @@
 package com.shirkanesi.artemistutormapper.model.exercise;
 
-import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.shirkanesi.artemistutormapper.logic.ArtemisClient;
 import com.shirkanesi.artemistutormapper.model.submission.FileUploadSubmission;
-import com.shirkanesi.artemistutormapper.model.submission.ProgrammingSubmission;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import lombok.ToString;
