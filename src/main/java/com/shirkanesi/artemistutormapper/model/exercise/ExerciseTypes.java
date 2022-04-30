@@ -7,7 +7,8 @@ import lombok.ToString;
 @ToString
 public enum ExerciseTypes {
 
-    PROGRAMMING("PROGRAMMING"),
+    PROGRAMMING("programming"),
+    FILE_UPLOAD("file-upload"),
 
     @JsonEnumDefaultValue
     UNKNOWN("unknown");

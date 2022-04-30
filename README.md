@@ -6,7 +6,7 @@
 *If you are interested in fixing this issue, take a look at the hard-coded constant [here](https://github.com/ls1intum/Artemis/blob/f13a8dc62205f950fe1ea39b7d0cb50b44a8b091/src/main/java/de/tum/in/www1/artemis/config/Constants.java#L94).*
 *Until this is fixed in Artemis we've got to stick with this solution :(*
 
-*Note2: The current implementation only supports programming-exercises. Other types can/will be implemented in the future.*
+*Note2: The current implementation only supports programming-exercises and file-upload-exercises. Other types can/will be implemented in the future.*
 
 ### Motivation
 The platform Artemis does not offer a possibility for tutors to correct their **own** students.

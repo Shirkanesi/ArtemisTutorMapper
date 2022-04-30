@@ -19,7 +19,7 @@ import java.util.List;
 public abstract class Exercise {
 
     @JsonProperty
-    private String type;
+    private ExerciseTypes type;
 
     @JsonProperty
     private int id;
@@ -109,7 +109,7 @@ public abstract class Exercise {
     private boolean isLocalSimulation;
 
     @JsonProperty
-    private ExerciseTypes exerciseType;
+    private String exerciseType;
 
     @JsonProperty
     private boolean studentAssignedTeamIdComputed;

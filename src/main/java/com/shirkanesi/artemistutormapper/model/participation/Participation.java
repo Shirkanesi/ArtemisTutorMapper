@@ -1,7 +1,8 @@
-package com.shirkanesi.artemistutormapper.model;
+package com.shirkanesi.artemistutormapper.model.participation;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.shirkanesi.artemistutormapper.model.ArtemisUser;
 import lombok.Getter;
 import lombok.ToString;
 
@@ -32,15 +33,6 @@ public class Participation {
 
     @JsonProperty
     private ArtemisUser student;
-
-    @JsonProperty
-    private String repositoryUrl;
-
-    @JsonProperty
-    private String buildPlanId;
-
-    @JsonProperty
-    private String userIndependentRepositoryUrl;
 
     @JsonProperty
     private String participantName;

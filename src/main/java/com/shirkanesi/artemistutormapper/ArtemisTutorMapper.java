@@ -19,6 +19,7 @@ import org.apache.commons.cli.ParseException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -88,6 +89,7 @@ public class ArtemisTutorMapper {
         if (!cmd.hasOption(exerciseOption)) {
             log.info("List of all exercises:");
             exercises.stream()
+                    .sorted(Comparator.comparingInt(Exercise::getId))
                     .map(exercise -> String.format("%d: %s", exercise.getId(), exercise.getTitle()))
 //                    .map(exercise -> String.format("%s: %s", exercise.getType(), exercise.getExerciseType()))
 //                    .map(exercise -> exercise.getClass().getCanonicalName())
@@ -140,6 +142,5 @@ public class ArtemisTutorMapper {
     private boolean isOwnStudent(Submission submission) {
         return studentNames.contains(submission.getParticipation().getStudent().getParticipantIdentifier().toLowerCase());
     }
-
 
 }

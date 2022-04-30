@@ -3,20 +3,16 @@ package com.shirkanesi.artemistutormapper.model.submission;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shirkanesi.artemistutormapper.logic.ArtemisClient;
-import com.shirkanesi.artemistutormapper.model.Participation;
+import com.shirkanesi.artemistutormapper.model.participation.Participation;
 import com.shirkanesi.artemistutormapper.model.Result;
 import com.shirkanesi.artemistutormapper.model.error.JHipsterError;
 import com.shirkanesi.artemistutormapper.model.exercise.ExerciseTypes;
-import com.squareup.okhttp.Request;
-import com.squareup.okhttp.RequestBody;
 import com.squareup.okhttp.Response;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
-
-import static com.shirkanesi.artemistutormapper.ArtemisTutorMapper.ARTEMIS_BASE_URL;
 
 @Slf4j
 @Getter
@@ -38,15 +34,6 @@ public abstract class Submission {
 
     @JsonProperty
     private String submissionDate;
-
-    @JsonProperty
-    private String commitHash;
-
-    @JsonProperty
-    private boolean buildFailed = false;
-
-    @JsonProperty
-    private boolean buildArtifact = false;
 
     @JsonProperty
     private boolean empty = false;
