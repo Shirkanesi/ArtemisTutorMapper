@@ -1,16 +1,22 @@
-package com.shirkanesi.artemistutormapper.model;
+package com.shirkanesi.artemistutormapper.model.exercise;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.shirkanesi.artemistutormapper.logic.ArtemisClient;
+import com.shirkanesi.artemistutormapper.model.submission.Submission;
+import com.shirkanesi.artemistutormapper.model.deserialize.ExerciseDeserializer;
 import lombok.Getter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @ToString
+@JsonDeserialize(using = ExerciseDeserializer.class)
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Exercise {
+public abstract class Exercise {
 
     @JsonProperty
     private String type;
@@ -20,7 +26,6 @@ public class Exercise {
 
     @JsonProperty
     private String title;
-
 
     @JsonProperty
     private String shortName;
@@ -104,7 +109,7 @@ public class Exercise {
     private boolean isLocalSimulation;
 
     @JsonProperty
-    private String exerciseType;
+    private ExerciseTypes exerciseType;
 
     @JsonProperty
     private boolean studentAssignedTeamIdComputed;
@@ -123,5 +128,7 @@ public class Exercise {
 
     @JsonProperty
     private boolean visibleToStudents;
+
+    public abstract List<? extends Submission> getSubmissionsForExercise(ArtemisClient client);
 
 }

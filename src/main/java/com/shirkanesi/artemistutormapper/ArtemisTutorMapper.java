@@ -1,11 +1,13 @@
 package com.shirkanesi.artemistutormapper;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shirkanesi.artemistutormapper.logic.ArtemisClient;
 import com.shirkanesi.artemistutormapper.logic.AuthenticationService;
 import com.shirkanesi.artemistutormapper.logic.StudentFileParser;
 import com.shirkanesi.artemistutormapper.logic.ui.TUIHelper;
-import com.shirkanesi.artemistutormapper.model.Submission;
+import com.shirkanesi.artemistutormapper.model.exercise.Exercise;
+import com.shirkanesi.artemistutormapper.model.submission.Submission;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.DefaultParser;
@@ -18,12 +20,16 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ArtemisTutorMapper {
 
     public static String ARTEMIS_BASE_URL = "https://artemis.praktomat.cs.kit.edu";
-    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper() {{
+        enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
+    }};
     private List<String> studentNames;
 
     private final ArtemisClient artemisClient;
@@ -75,23 +81,28 @@ public class ArtemisTutorMapper {
         AuthenticationService authenticationService = new AuthenticationService(username, password);
         ArtemisClient client = new ArtemisClient(authenticationService);
 
+        Set<Exercise> exercises = client.getCoursesForManagement()
+                .stream()
+                .flatMap(course -> course.getExercises().stream()).collect(Collectors.toSet());
+
         if (!cmd.hasOption(exerciseOption)) {
             log.info("List of all exercises:");
-            client.getCoursesForManagement()
-                    .stream()
-                    .flatMap(course -> course.getExercises().stream())
+            exercises.stream()
                     .map(exercise -> String.format("%d: %s", exercise.getId(), exercise.getTitle()))
+//                    .map(exercise -> String.format("%s: %s", exercise.getType(), exercise.getExerciseType()))
+//                    .map(exercise -> exercise.getClass().getCanonicalName())
                     .forEachOrdered(System.out::println);
         }
 
         int exerciseId = TUIHelper.getIntegerParameter(cmd, exerciseOption);
 
+        Exercise exercise = exercises.stream().filter(e -> e.getId() == exerciseId).findFirst().orElseThrow();
 
         ArtemisTutorMapper artemisTutorMapper = new ArtemisTutorMapper(client);
 
         artemisTutorMapper.loadOwnStudents(file);
 
-        artemisTutorMapper.lockAllSubmissionsOfOwnStudents(exerciseId);
+        artemisTutorMapper.lockAllSubmissionsOfOwnStudents(exercise);
     }
 
     public ArtemisTutorMapper(ArtemisClient artemisClient) {
@@ -112,10 +123,10 @@ public class ArtemisTutorMapper {
         }
     }
 
-    private void lockAllSubmissionsOfOwnStudents(int exerciseId) {
-        List<Submission> submissions = this.artemisClient.getSubmissionsForExercise(exerciseId);
+    private void lockAllSubmissionsOfOwnStudents(Exercise exercise) {
+        List<? extends Submission> submissions = exercise.getSubmissionsForExercise(this.artemisClient);
 
-        log.info("Trying to lock submissions of own students (for exercise {}).", exerciseId);
+        log.info("Trying to lock submissions of own students (for exercise {}).", exercise.getId());
 
         log.info("Found {} submissions in total", submissions.size());
 
@@ -123,7 +134,7 @@ public class ArtemisTutorMapper {
 //                .map(submission -> submission.getParticipation().getStudent().getName()).forEach(System.out::println);    // TODO: debug only
 //                .forEach(System.out::println);
                 .filter(this::isOwnStudent) // we only want to lock submissions of own students
-                .forEach(artemisClient::lockSubmission);    // lock the submissions
+                .forEach(submission -> submission.lockSubmission(this.artemisClient));    // lock the submissions
     }
 
     private boolean isOwnStudent(Submission submission) {
