@@ -8,10 +8,12 @@ import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.deser.std.StdDeserializer;
 import com.fasterxml.jackson.databind.node.ValueNode;
 import com.shirkanesi.artemistutormapper.model.exercise.Exercise;
+import com.shirkanesi.artemistutormapper.model.exercise.ExerciseTypes;
 import com.shirkanesi.artemistutormapper.model.exercise.FileUploadExercise;
 import com.shirkanesi.artemistutormapper.model.exercise.ProgrammingExercise;
 
 import java.io.IOException;
+import java.util.Optional;
 
 public class ExerciseDeserializer extends StdDeserializer<Exercise> {
 
@@ -30,13 +32,12 @@ public class ExerciseDeserializer extends StdDeserializer<Exercise> {
 
         String typeValue = ((ValueNode) type).textValue();
 
-        return switch (typeValue) {
-            case "programming" ->
-                    jsonParser.getCodec().treeToValue(node, ProgrammingExercise.class);
-            case "file-upload" ->
-                    jsonParser.getCodec().treeToValue(node, FileUploadExercise.class);
-            default ->
-                    throw new JsonParseException(jsonParser, String.format("Could not find any exercise-class to deserialize \"%s\"-exercise!", typeValue));
-        };
+        Optional<ExerciseTypes> typeByInternalName = ExerciseTypes.getByInternalName(typeValue);
+
+        if (typeByInternalName.isEmpty()) {
+            throw new JsonParseException(jsonParser, String.format("Could not find any exercise-class to deserialize \"%s\"-exercise!", typeValue));
+        }
+
+        return jsonParser.getCodec().treeToValue(node, typeByInternalName.get().getObjectClass());
     }
 }

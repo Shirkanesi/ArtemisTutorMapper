@@ -3,11 +3,16 @@ package com.shirkanesi.artemistutormapper.model;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.shirkanesi.artemistutormapper.model.exercise.Exercise;
+import com.shirkanesi.artemistutormapper.model.exercise.ExerciseTypes;
+import com.shirkanesi.artemistutormapper.model.exercise.FileUploadExercise;
+import com.shirkanesi.artemistutormapper.model.exercise.ProgrammingExercise;
 import lombok.Getter;
 import lombok.ToString;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @ToString
@@ -83,5 +88,19 @@ public class Course {
 
     public List<Exercise> getExercises() {
         return Collections.unmodifiableList(this.exercises);
+    }
+
+    public Collection<ProgrammingExercise> getProgrammingExercises() {
+        return this.exercises.stream()
+                .filter(exercise -> exercise.getType().equals(ExerciseTypes.PROGRAMMING))
+                .map(exercise -> (ProgrammingExercise) exercise)
+                .collect(Collectors.toSet());
+    }
+
+    public Collection<FileUploadExercise> getFileUploadExercises() {
+        return this.exercises.stream()
+                .filter(exercise -> exercise.getType().equals(ExerciseTypes.FILE_UPLOAD))
+                .map(exercise -> (FileUploadExercise) exercise)
+                .collect(Collectors.toSet());
     }
 }
