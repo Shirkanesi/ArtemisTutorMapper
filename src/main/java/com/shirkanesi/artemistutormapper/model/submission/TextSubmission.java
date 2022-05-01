@@ -12,8 +12,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
-import static com.shirkanesi.artemistutormapper.ArtemisTutorMapper.ARTEMIS_BASE_URL;
-
 @Slf4j
 @Getter
 @ToString
@@ -25,14 +23,14 @@ public class TextSubmission extends Submission {
 
     @Override
     protected Response doLockSubmission(ArtemisClient client) throws IOException {
-        String url = String.format(ARTEMIS_BASE_URL + "/api/participations/%d/submissions/%d/for-text-assessment", this.getParticipation().getId(), this.getId());
+        String url = String.format(client.getArtemisBaseUrl() + "/api/participations/%d/submissions/%d/for-text-assessment", this.getParticipation().getId(), this.getId());
         Request.Builder request = new Request.Builder().get().url(url);
         return client.makeRequest(request);
     }
 
     @Override
     protected Response doCancelAssessmentOfSubmission(ArtemisClient client) throws IOException {
-        String url = String.format(ARTEMIS_BASE_URL + "/api/participations/%d/submissions/%d/cancel-assessment", this.getParticipation().getId(), this.getId());
+        String url = String.format(client.getArtemisBaseUrl() + "/api/participations/%d/submissions/%d/cancel-assessment", this.getParticipation().getId(), this.getId());
         Request.Builder request = new Request.Builder().post(RequestBody.create(null, new byte[0])).url(url);
         return client.makeRequest(request);
     }

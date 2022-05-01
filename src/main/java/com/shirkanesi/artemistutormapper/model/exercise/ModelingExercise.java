@@ -13,8 +13,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.shirkanesi.artemistutormapper.ArtemisTutorMapper.ARTEMIS_BASE_URL;
-import static com.shirkanesi.artemistutormapper.ArtemisTutorMapper.OBJECT_MAPPER;
+import static com.shirkanesi.artemistutormapper.logic.ArtemisClient.OBJECT_MAPPER;
 
 @Getter
 @ToString
@@ -29,7 +28,7 @@ public class ModelingExercise extends Exercise {
 
     @Override
     public List<ModelingSubmission> getSubmissionsForExercise(ArtemisClient client) {
-        String url = String.format(ARTEMIS_BASE_URL + "/api/exercises/%d/modeling-submissions?submittedOnly=true", this.getId());
+        String url = String.format(client.getArtemisBaseUrl() + "/api/exercises/%d/modeling-submissions?submittedOnly=true", this.getId());
         Request.Builder request = new Request.Builder().get().url(url);
         try {
             Response response = client.makeRequest(request);

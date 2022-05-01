@@ -6,7 +6,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.Getter;
 import lombok.ToString;
 
-import static com.shirkanesi.artemistutormapper.ArtemisTutorMapper.OBJECT_MAPPER;
+import static com.shirkanesi.artemistutormapper.logic.ArtemisClient.OBJECT_MAPPER;
 
 @Getter
 @ToString

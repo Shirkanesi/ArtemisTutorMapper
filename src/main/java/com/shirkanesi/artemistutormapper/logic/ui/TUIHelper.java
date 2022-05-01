@@ -6,7 +6,7 @@ import org.apache.commons.cli.Option;
 import java.io.Console;
 import java.util.Scanner;
 
-public class TUIHelper {
+public final class TUIHelper {
 
     private static final Scanner scanner = new Scanner(System.in);
     private static final Console console = System.console();
@@ -14,6 +14,11 @@ public class TUIHelper {
     static {
         Runtime.getRuntime().addShutdownHook(new Thread(scanner::close));
     }
+
+    private TUIHelper() {
+        throw new IllegalAccessError("Utility-classes may not be instantiated!");
+    }
+
     public static String getStringParameter(CommandLine cmd, Option option) {
         if (cmd.hasOption(option)) {
             return cmd.getOptionValue(option);

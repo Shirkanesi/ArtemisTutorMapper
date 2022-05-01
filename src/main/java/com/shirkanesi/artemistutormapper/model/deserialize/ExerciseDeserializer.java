@@ -1,6 +1,5 @@
 package com.shirkanesi.artemistutormapper.model.deserialize;
 
-import com.fasterxml.jackson.core.JacksonException;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.TreeNode;

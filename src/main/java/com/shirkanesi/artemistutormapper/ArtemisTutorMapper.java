@@ -1,7 +1,5 @@
 package com.shirkanesi.artemistutormapper;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.shirkanesi.artemistutormapper.logic.ArtemisClient;
 import com.shirkanesi.artemistutormapper.logic.AuthenticationService;
 import com.shirkanesi.artemistutormapper.logic.StudentFileParser;
@@ -28,10 +26,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ArtemisTutorMapper {
 
-    public static String ARTEMIS_BASE_URL = "https://artemis.praktomat.cs.kit.edu";
-    public static final ObjectMapper OBJECT_MAPPER = new ObjectMapper() {{
-        enable(DeserializationFeature.READ_UNKNOWN_ENUM_VALUES_USING_DEFAULT_VALUE);
-    }};
+    private static final String DEFAULT_ARTEMIS_BASE_URL = "https://artemis.praktomat.cs.kit.edu";
+
     private List<String> studentNames;
 
     private final ArtemisClient artemisClient;
@@ -45,7 +41,7 @@ public class ArtemisTutorMapper {
         Option usernameOption = new Option("u", "username", true, "Artemis username");
         Option passwordOption = new Option("p", "password", true, "Artemis password");
         Option exerciseOption = new Option("e", "exercise", true, "id of exercise to lock");
-        Option artemisOption = new Option("a", "artemis", true, "Artemis URL (default: " + ARTEMIS_BASE_URL + ")");
+        Option artemisOption = new Option("a", "artemis", true, "Artemis URL (default: " + DEFAULT_ARTEMIS_BASE_URL + ")");
         Option fileOption = new Option("f", "file", true, "Path to student-file");
         Option helpOption = new Option("h", "help", false, "Print this help");
 
@@ -66,13 +62,15 @@ public class ArtemisTutorMapper {
         String username = TUIHelper.getStringParameter(cmd, usernameOption);
         String password = TUIHelper.getPasswordParameter(cmd, passwordOption);
 
+        String artemisUrl = DEFAULT_ARTEMIS_BASE_URL;
+
         if (cmd.hasOption(artemisOption)) {
             String optionValue = cmd.getOptionValue(artemisOption);
             while (optionValue.endsWith("/")) {
                 // remove slash at the end
                 optionValue = optionValue.substring(0, optionValue.length() - 1);
             }
-            ARTEMIS_BASE_URL = optionValue;
+            artemisUrl = optionValue;
         }
 
         String file = TUIHelper.getStringParameter(cmd, fileOption);
@@ -80,7 +78,7 @@ public class ArtemisTutorMapper {
 
         // Auth-Parameters parsed and available
 
-        AuthenticationService authenticationService = new AuthenticationService(username, password);
+        AuthenticationService authenticationService = new AuthenticationService(username, password, artemisUrl);
         ArtemisClient client = new ArtemisClient(authenticationService);
 
         Set<Exercise> exercises = client.getCoursesForManagement()

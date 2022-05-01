@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 
-import static com.shirkanesi.artemistutormapper.ArtemisTutorMapper.ARTEMIS_BASE_URL;
-
 @Slf4j
 @Getter
 @ToString
@@ -29,14 +27,14 @@ public class FileUploadSubmission extends Submission {
 
     @Override
     protected Response doLockSubmission(ArtemisClient client) throws IOException {
-        String url = String.format(ARTEMIS_BASE_URL + "/api/file-upload-submissions/%d?correction-round=0", this.getId());
+        String url = String.format(client.getArtemisBaseUrl() + "/api/file-upload-submissions/%d?correction-round=0", this.getId());
         Request.Builder request = new Request.Builder().get().url(url);
         return client.makeRequest(request);
     }
 
     @Override
     protected Response doCancelAssessmentOfSubmission(ArtemisClient client) throws IOException {
-        String url = String.format(ARTEMIS_BASE_URL + "/api/file-upload-submissions/%d/cancel-assessment", this.getId());
+        String url = String.format(client.getArtemisBaseUrl() + "/api/file-upload-submissions/%d/cancel-assessment", this.getId());
         Request.Builder request = new Request.Builder().put(RequestBody.create(null, new byte[0])).url(url);
         return client.makeRequest(request);
     }
