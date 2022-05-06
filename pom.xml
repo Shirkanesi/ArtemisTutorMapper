@@ -11,6 +11,7 @@
     <modules>
         <module>ArtemisClient</module>
         <module>ArtemisTutorMapper</module>
+        <module>ArtemisToolsTestApp</module>
     </modules>
 
     <properties>

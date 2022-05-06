@@ -9,6 +9,7 @@ import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
 import lombok.extern.slf4j.Slf4j;
+import org.gitlab4j.api.GitLabApi;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -24,6 +25,8 @@ public class ArtemisClient {
     private final AuthenticationService authenticationService;
 
     private final OkHttpClient httpClient;
+
+    private GitLabApi gitLabApi;
 
     /**
      * Creates a new {@link ArtemisClient} using the supplied {@link AuthenticationService}
@@ -78,4 +81,11 @@ public class ArtemisClient {
         return this.authenticationService.getArtemisUrl();
     }
 
+    public GitLabApi getGitLabApi() {
+        if (this.gitLabApi == null) {
+            // Temporary...
+            this.gitLabApi = new GitLabApi(System.getenv("GIT_URL"), System.getenv("GIT_PASSWORD"));
+        }
+        return gitLabApi;
+    }
 }
