@@ -29,7 +29,7 @@ public class ArtemisClient {
     private final OkHttpClient httpClient;
 
     @Getter
-    private RepositoryType repositoryType = RepositoryType.GITLAB;
+    private RepositoryType repositoryType = RepositoryType.GITLAB; // TODO: load this value dynamically!
 
     private GitLabApi gitLabApi;
 
@@ -82,13 +82,21 @@ public class ArtemisClient {
         }
     }
 
+    /**
+     * get the base-url of the Artemis-instance the user is authenticated to
+     * @return the base-url of Artemis
+     */
     public String getArtemisBaseUrl() {
         return this.authenticationService.getArtemisUrl();
     }
 
+    /**
+     * Get an authenticated instance of a {@link GitLabApi} to read student's repositories and modify them
+     * @return the {@link GitLabApi}
+     */
     public GitLabApi getGitLabApi() {
         if (this.gitLabApi == null) {
-            // Temporary...
+            // Temporary... Values must be supplied properly in the future.
             this.gitLabApi = new GitLabApi(System.getenv("GIT_URL"), System.getenv("GIT_PASSWORD"));
         }
         return gitLabApi;
