@@ -111,7 +111,7 @@ public class ArtemisClientTester {
         log.info("Found {} submissions in total", submissions.size());
 
         submissions.stream().findAny().ifPresent(submission ->
-                ((ProgrammingParticipation) submission.getParticipation()).getGitlabProject(this.artemisClient)
+                ((ProgrammingParticipation) submission.getParticipation()).getArtemisRepository(this.artemisClient)
         );
 
     }

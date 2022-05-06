@@ -1,6 +1,7 @@
 package com.shirkanesi.artemis.client.logic;
 
 import com.shirkanesi.artemis.client.exception.ArtemisClientException;
+import com.shirkanesi.artemis.client.logic.repository.RepositoryType;
 import com.shirkanesi.artemis.client.model.Course;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -8,6 +9,7 @@ import com.squareup.okhttp.Call;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
 import com.squareup.okhttp.Response;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.gitlab4j.api.GitLabApi;
 
@@ -25,6 +27,9 @@ public class ArtemisClient {
     private final AuthenticationService authenticationService;
 
     private final OkHttpClient httpClient;
+
+    @Getter
+    private RepositoryType repositoryType = RepositoryType.GITLAB;
 
     private GitLabApi gitLabApi;
 
