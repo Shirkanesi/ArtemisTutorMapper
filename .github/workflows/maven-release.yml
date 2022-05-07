@@ -35,10 +35,10 @@ jobs:
       - name: Build with Maven
         run: mvn -B package --file pom.xml
 
-      - name: Move output-JAR
+      - name: Move output-JARs
         run: |
           mkdir dist
-          mv target/ArtemisTutor*.jar dist/ArtemisTutorMapping.jar
+          mv ArtemisTutorMapper/target/ArtemisTutor*.jar dist/ArtemisTutorMapping.jar
 
       - name: Save JAR
         uses: actions/upload-artifact@v3

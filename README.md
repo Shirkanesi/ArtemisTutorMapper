@@ -14,16 +14,22 @@ This project provides a workaround for this by allowing tutors to start the corr
 and therefore allows them to open the correction-page right from their dashboard.
 
 ### Quick-Start
-Simply download the latest version of the tool and run it with the proper arguments:
+Simply download the latest version of the tool and run it:
+
 ```
-java -jar <FileName.jar> -u <username> -p <password> -e <exercise-id> -f <path/to/students-file.txt>
+java -jar ArtemisTutorMapper.jar
 ```
+The tool will ask you for all the information required to lock the submissions. If you want to automate parts of the process,
+you can simply provide the information as commandline-parameters (as described further below).
+
 The students-file should be a textfile containing the identifiers of the students (in case of KIT: "uxxxx").
 Those must be separated by comma, spaces or new-lines; the tool will figure it out automatically.
 
-The exercise-id can be found in the url of the dashboard (second number)
+The exercise-id can be found in the url of the dashboard (second number). The tool will list all exercises with their name if no exercise is supplied
 
-If you do not want your password to show up in the bash-history, you can also leave out `-p` and you'll be prompted to input it later.
+```
+java -jar <FileName.jar> -u <username> -p <password> -e <exercise-id> -f <path/to/students-file.txt>
+```
 
 List of all parameters:
 ```
