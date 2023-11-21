@@ -1,3 +1,5 @@
+*I'm no longer working with Artemis, therefore any code found here must be considered unstable, untested or broken. Use at your own risk!*
+
 # ArtemisTutorMapper
 
 *Note: This tool has not been fully tested and therefore might cause issues. This IS work in progress. However, in theory, there <u>shouldn't</u> be any problems using it.*
